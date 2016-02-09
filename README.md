@@ -1,1 +1,1 @@
-# Y 漫画viwer
+# Y 漫画viewer
