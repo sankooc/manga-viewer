@@ -91,19 +91,19 @@ exports.find = function(option,callback){
 		callback(err,result);
 		_db.close();
 	});
-}
+};
 
-exports.update = function(vid,option,callbacj){
+exports.update = function(vid,option,callback){
 	var _db;
 	async.waterfall([async.apply(_connect),function(db,callback){
 		var collection = db.collection(docName);
 		_db = db;
-		collection.findOneAndUpdate({"vid":vid},{$set:option},callback);
+		collection.findOneAndUpdate({"vid":parseInt(vid)},{$set:option},callback);
 	}],function(err,result){
 		callback(err,result);
 		_db.close();
 	});
-}
+};
 
 
 

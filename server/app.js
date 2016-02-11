@@ -12,7 +12,6 @@ app.use('/asset', express.static(ROOT));
 app.get('/api/volumns/:vid',function(req,res){
 	var vid = req.params.vid;
 	db.get(vid,function(err,volumn){
-		console.log(arguments);
 		if(err){
 			console.trace(err.stack);
 			return res.status(400);
@@ -24,13 +23,14 @@ app.get('/api/volumns/:vid',function(req,res){
 app.put('/api/volumns/:vid',function(req,res){
 	var body = req.body;
 	var vid = req.params.vid;
-	var option = _.pick(body,'tag','title');
+	var option = _.pick(body,'tags','title');
+	option.tags = option.tags || [];
 	db.update(vid,option,function(err,doc){
 		if(err){
 			return res.status(400).end();
 		}
 		res.json(doc);
-	})
+	});
 });
 
 
@@ -57,7 +57,6 @@ app.get('/api/volumns',function(req,res){
 		var filter = {title:regex};
 		option.filter = filter;
 	}
-	console.log(option);
 	db.load(option,function(err,items){
 		if(err){
 			return res.status(400).end();
