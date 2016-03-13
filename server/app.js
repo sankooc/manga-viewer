@@ -16,6 +16,8 @@ app.get('/api/volumns/:vid',function(req,res){
 			console.trace(err.stack);
 			return res.status(400);
 		}
+		var read = volumn.read || 0;
+		db.update(vid,{read:++read},function(){});
 		res.json(volumn);
 	});
 });
