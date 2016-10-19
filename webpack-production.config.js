@@ -15,7 +15,7 @@ var config = {
   },
   devtool: 'source-map',
   output: {
-    path: buildPath, 
+    path: buildPath,
     filename: '[name].js'
   },
   plugins: [
@@ -44,7 +44,7 @@ var config = {
         loader: ExtractTextPlugin.extract("style-loader", "css-loader")
       },
       {
-        test: /\.(png|jpg|json|ttf|svg|woff|woff2|eot)$/, 
+        test: /\.(png|jpg|json|ttf|svg|woff|woff2|eot)(\?v=\d\.\d\.\d)?$/, 
         loader: 'url-loader?limit=8192'
       }
     ]

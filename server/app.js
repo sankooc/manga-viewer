@@ -9,6 +9,13 @@ var db = require('./mongo-server');
 var ROOT = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.mrepo';
 app.use('/',express.static(__dirname+'/../build'));
 app.use('/asset', express.static(ROOT));
+
+
+function asInt(v){
+	v = v.endsWith('.jpg')?v.substring(0,v.length - 4):v;
+	// console.log(v)
+	return  parseInt(v) || 0;
+}
 app.get('/api/volumns/:vid',function(req,res){
 	var vid = req.params.vid;
 	db.get(vid,function(err,volumn){
@@ -18,6 +25,13 @@ app.get('/api/volumns/:vid',function(req,res){
 		}
 		var read = volumn.read || 0;
 		db.update(vid,{read:++read},function(){});
+
+		if(volumn.list){
+			volumn.list.sort(function(v1,v2){
+				return asInt(v1) - asInt(v2);
+			})
+		}
+		// console.log(volumn.list);
 		res.json(volumn);
 	});
 });
@@ -34,7 +48,6 @@ app.put('/api/volumns/:vid',function(req,res){
 		res.json(doc);
 	});
 });
-
 
 app.delete('/api/volumns/:vid',function(req,res){
 	var vid = req.params.vid;
@@ -71,3 +84,14 @@ app.listen(3030,function(){
 	console.log('server connect');
 });
 
+if (!String.prototype.endsWith) {
+  String.prototype.endsWith = function(searchString, position) {
+      var subjectString = this.toString();
+      if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+        position = subjectString.length;
+      }
+      position -= searchString.length;
+      var lastIndex = subjectString.indexOf(searchString, position);
+      return lastIndex !== -1 && lastIndex === position;
+  };
+}
